@@ -1,921 +1,430 @@
-// Watchlist state
-let watchlist = [];
+/**
+ * Freevee Clone - Re-developed Core Logic
+ * Focus: Modularity, Speed, and Visual Polish
+ */
 
-const profiles = [
-    { name: "Naveen", seed: "Naveen", color: "var(--primary-color)" },
-    { name: "Suresh", seed: "Suresh", color: "#e50914" },
-    { name: "Kids", seed: "Felix", color: "#00a8e1" },
-    { name: "Guest", seed: "Aneka", color: "#22c55e" }
+// --- DATA: Premium Initial Set ---
+const movieData = [
+    // --- TRENDING NOW ---
+    { id: "t1", title: "Avatar: The Way of Water", category: "trending", img: "https://upload.wikimedia.org/wikipedia/en/5/54/Avatar_The_Way_of_Water_poster.jpg", trailer: "https://www.youtube.com/embed/d9MyW72ELR0?autoplay=1&origin=http://127.0.0.1:5500", rating: "PG-13", year: "2022", type: "movie" },
+    { id: "t2", title: "Top Gun: Maverick", category: "trending", img: "https://upload.wikimedia.org/wikipedia/en/1/13/Top_Gun_Maverick_Poster.jpg", trailer: "https://www.youtube.com/embed/giXco2jaZ_4?autoplay=1", rating: "PG-13", year: "2022", type: "movie" },
+    { id: "t3", title: "Oppenheimer", category: "trending", img: "https://upload.wikimedia.org/wikipedia/en/4/4a/Oppenheimer_%28film%29.jpg", trailer: "https://www.youtube.com/embed/uYPbbksJxIg?autoplay=1", rating: "R", year: "2023", type: "movie" },
+    { id: "t4", title: "Everything Everywhere All at Once", category: "trending", img: "https://upload.wikimedia.org/wikipedia/en/1/1e/Everything_Everywhere_All_at_Once.jpg", trailer: "https://www.youtube.com/embed/wxN1T1uxQ2g?autoplay=1", rating: "R", year: "2022", type: "movie" },
+
+    // --- ACTION ---
+    { id: "a1", title: "John Wick", category: "action", img: "https://upload.wikimedia.org/wikipedia/en/9/98/John_Wick_TeaserPoster.jpg", trailer: "https://www.youtube.com/embed/C0BMxPqM-tE?autoplay=1", rating: "R", year: "2014", type: "movie" },
+    { id: "a2", title: "Mad Max: Fury Road", category: "action", img: "https://upload.wikimedia.org/wikipedia/en/6/6e/Mad_Max_Fury_Road.jpg", trailer: "https://www.youtube.com/embed/hEJnMQG9ev8?autoplay=1", rating: "R", year: "2015", type: "movie" },
+    { id: "a3", title: "The Dark Knight", category: "action", img: "https://upload.wikimedia.org/wikipedia/en/8/8a/Dark_Knight.jpg", trailer: "https://www.youtube.com/embed/EXe4O3jP6pM?autoplay=1", rating: "PG-13", year: "2008", type: "movie" },
+    { id: "a4", title: "Extraction", category: "action", img: "https://upload.wikimedia.org/wikipedia/en/8/89/Extraction_%282020_film%29_poster.jpg", trailer: "https://www.youtube.com/embed/L6P3nI6VnlY?autoplay=1", rating: "R", year: "2020", type: "movie" },
+    { id: "a5", title: "Mission: Impossible – Fallout", category: "action", img: "https://upload.wikimedia.org/wikipedia/en/f/ff/Mission_Impossible_Fallout.jpg", trailer: "https://www.youtube.com/embed/wb4dgCJOd2Q?autoplay=1", rating: "PG-13", year: "2018", type: "movie" },
+    { id: "a6", title: "Gladiator", category: "action", img: "https://upload.wikimedia.org/wikipedia/en/f/fb/Gladiator_%282000_film%29_poster.jpg", trailer: "https://www.youtube.com/embed/I_i_0-I631Q?autoplay=1", rating: "R", year: "2000", type: "movie" },
+    { id: "a7", title: "War (Hindi)", category: "action", img: "https://upload.wikimedia.org/wikipedia/en/6/6f/War_official_poster.jpg", trailer: "https://www.youtube.com/embed/tQ0mzXRk-oM?autoplay=1", rating: "UA", year: "2019", type: "movie" },
+    { id: "a8", title: "KGF Chapter 1", category: "action", img: "https://upload.wikimedia.org/wikipedia/en/c/cc/K.G.F_Chapter_1_poster.jpg", trailer: "https://www.youtube.com/embed/qXgF-iJ_ezE?autoplay=1", rating: "UA", year: "2018", type: "movie" },
+    { id: "a9", title: "KGF Chapter 2", category: "action", img: "https://upload.wikimedia.org/wikipedia/en/d/d0/K.G.F_Chapter_2_poster.jpg", trailer: "https://www.youtube.com/embed/JKa05nyUmuQ?autoplay=1", rating: "UA", year: "2022", type: "movie" },
+    { id: "a10", title: "Pushpa: The Rise", category: "action", img: "https://upload.wikimedia.org/wikipedia/en/7/75/Pushpa_The_Rise_poster.jpg", trailer: "https://www.youtube.com/embed/QX43QTYyV-8?autoplay=1", rating: "UA", year: "2021", type: "movie" },
+
+    // --- SCI-FI ---
+    { id: "s1", title: "Interstellar", category: "scifi", img: "https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg", trailer: "https://www.youtube.com/embed/zSWdZVtXT7E?autoplay=1", rating: "PG-13", year: "2014", type: "movie" },
+    { id: "s2", title: "Inception", category: "scifi", img: "https://upload.wikimedia.org/wikipedia/en/2/2e/Inception_%282010%29_theatrical_poster.jpg", trailer: "https://www.youtube.com/embed/YoHD9XEInc0?autoplay=1", rating: "PG-13", year: "2010", type: "movie" },
+    { id: "s3", title: "The Matrix", category: "scifi", img: "https://upload.wikimedia.org/wikipedia/en/c/c1/The_Matrix_Poster.jpg", trailer: "https://www.youtube.com/embed/vKQi3bBA1y8?autoplay=1", rating: "R", year: "1999", type: "movie" },
+    { id: "s4", title: "Avatar", category: "scifi", img: "https://upload.wikimedia.org/wikipedia/en/d/d6/Avatar_%282009_film%29_poster.jpg", trailer: "https://www.youtube.com/embed/5PSNL1qE6VY?autoplay=1", rating: "PG-13", year: "2009", type: "movie" },
+    { id: "s5", title: "Tenet", category: "scifi", img: "https://images.unsplash.com/photo-1527224857853-e3df217f98c7?w=800", trailer: "https://www.youtube.com/embed/LdOM0x0XDvA?autoplay=1", rating: "PG-13", year: "2020", type: "movie" },
+    { id: "s6", title: "Gravity", category: "scifi", img: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800", trailer: "https://www.youtube.com/embed/OiTiKO58ERg?autoplay=1", rating: "PG-13", year: "2013", type: "movie" },
+    { id: "s7", title: "The Martian", category: "scifi", img: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=800", trailer: "https://www.youtube.com/embed/ej3ioOneTy8?autoplay=1", rating: "PG-13", year: "2015", type: "movie" },
+    { id: "s8", title: "Dune", category: "scifi", img: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=800", trailer: "https://www.youtube.com/embed/8g18jJcl_v8?autoplay=1", rating: "PG-13", year: "2021", type: "movie" },
+
+    // --- HORROR ---
+    { id: "h1", title: "The Conjuring", category: "horror", img: "https://images.unsplash.com/photo-1505635330303-d3f135ad0d9d?w=800", trailer: "https://www.youtube.com/embed/k10ETZ41q5o?autoplay=1", rating: "R", year: "2013", type: "movie" },
+    { id: "h2", title: "Insidious", category: "horror", img: "https://images.unsplash.com/photo-1505635330303-d3f135ad0d9d?w=800", trailer: "https://www.youtube.com/embed/zuZnRUcoWos?autoplay=1", rating: "PG-13", year: "2010", type: "movie" },
+    { id: "h3", title: "A Quiet Place", category: "horror", img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800", trailer: "https://www.youtube.com/embed/WR7Nf6iN8iE?autoplay=1", rating: "PG-13", year: "2018", type: "movie" },
+    { id: "h4", title: "Hereditary", category: "horror", img: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800", trailer: "https://www.youtube.com/embed/V6YhYh2z3vQ?autoplay=1", rating: "R", year: "2018", type: "movie" },
+    { id: "h5", title: "It", category: "horror", img: "https://images.unsplash.com/photo-1505635330303-d3f135ad0d9d?w=800", trailer: "https://www.youtube.com/embed/FnCdOVs_X5E?autoplay=1", rating: "R", year: "2017", type: "movie" },
+    { id: "h6", title: "Get Out", category: "horror", img: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=800", trailer: "https://www.youtube.com/embed/DzfpyUB60YY?autoplay=1", rating: "R", year: "2017", type: "movie" },
+
+    // --- ROMANCE ---
+    { id: "r1", title: "Titanic", category: "romance", img: "https://images.unsplash.com/photo-1516589174184-e660e487494a?w=800", trailer: "https://www.youtube.com/embed/kVrqfYjkTdQ?autoplay=1", rating: "PG-13", year: "1997", type: "movie" },
+    { id: "r2", title: "The Notebook", category: "romance", img: "https://images.unsplash.com/photo-1516589174184-e660e487494a?w=800", trailer: "https://www.youtube.com/embed/ce.png?autoplay=1", rating: "PG-13", year: "2004", type: "movie" },
+    { id: "r3", title: "La La Land", category: "romance", img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800", trailer: "https://www.youtube.com/embed/0pdqf4P9MB8?autoplay=1", rating: "PG-13", year: "2016", type: "movie" },
+    { id: "r4", title: "Pride & Prejudice", category: "romance", img: "https://images.unsplash.com/photo-1516589174184-e660e487494a?w=800", trailer: "https://www.youtube.com/embed/1dY1O9s4JdI?autoplay=1", rating: "PG", year: "2005", type: "movie" },
+    { id: "r5", title: "Sita Ramam", category: "romance", img: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800", trailer: "https://www.youtube.com/embed/uBw_M_R74oU?autoplay=1", rating: "UA", year: "2022", type: "movie" },
+    { id: "r6", title: "Dilwale Dulhania Le Jayenge", category: "romance", img: "https://images.unsplash.com/photo-1516589174184-e660e487494a?w=800", trailer: "https://www.youtube.com/embed/c25GKl5VNeY?autoplay=1", rating: "UA", year: "1995", type: "movie" },
+
+    // --- COMEDY ---
+    { id: "c1", title: "The Hangover", category: "comedy", img: "https://images.unsplash.com/photo-1527224857853-e3df217f98c7?w=800", trailer: "https://www.youtube.com/embed/tcdUhdOlz9M?autoplay=1", rating: "R", year: "2009", type: "movie" },
+    { id: "c2", title: "3 Idiots", category: "comedy", img: "https://images.unsplash.com/photo-1527224857853-e3df217f98c7?w=800", trailer: "https://www.youtube.com/embed/K0eDlFX9Gmc?autoplay=1", rating: "UA", year: "2009", type: "movie" },
+    { id: "c3", title: "Superbad", category: "comedy", img: "https://images.unsplash.com/photo-1527224857853-e3df217f98c7?w=800", trailer: "https://www.youtube.com/embed/MNr3qD19m2Y?autoplay=1", rating: "R", year: "2007", type: "movie" },
+    { id: "c4", title: "Jathi Ratnalu", category: "comedy", img: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800", trailer: "https://www.youtube.com/embed/QfP4aZ2a4bE?autoplay=1", rating: "UA", year: "2021", type: "movie" },
+    { id: "c5", title: "Home Alone", category: "comedy", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800", trailer: "https://www.youtube.com/embed/jEDaVHmw7r4?autoplay=1", rating: "PG", year: "1990", type: "movie" },
+
+    // --- DRAMA ---
+    { id: "d1", title: "The Shawshank Redemption", category: "drama", img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800", trailer: "https://www.youtube.com/embed/6hB3S9bIaco?autoplay=1", rating: "R", year: "1994", type: "movie" },
+    { id: "d2", title: "Forrest Gump", category: "drama", img: "https://images.unsplash.com/photo-1505635330303-d3f135ad0d9d?w=800", trailer: "https://www.youtube.com/embed/bLvqoHBptjg?autoplay=1", rating: "PG-13", year: "1994", type: "movie" },
+    { id: "d3", title: "Parasite", category: "drama", img: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=800", trailer: "https://www.youtube.com/embed/5xH0HfJHsaY?autoplay=1", rating: "R", year: "2019", type: "movie" },
+    { id: "d4", title: "Slumdog Millionaire", category: "drama", img: "https://images.unsplash.com/photo-1527224857853-e3df217f98c7?w=800", trailer: "https://www.youtube.com/embed/AIzbwV7on6Q?autoplay=1", rating: "R", year: "2008", type: "movie" },
+    { id: "d5", title: "The Social Network", category: "drama", img: "https://images.unsplash.com/photo-1505635330303-d3f135ad0d9d?w=800", trailer: "https://www.youtube.com/embed/lB95KLmpLR4?autoplay=1", rating: "PG-13", year: "2010", type: "movie" },
+
+    // --- THRILLER ---
+    { id: "th1", title: "Se7en", category: "thriller", img: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=800", trailer: "https://www.youtube.com/embed/znmZoVkCjpI?autoplay=1", rating: "R", year: "1995", type: "movie" },
+    { id: "th2", title: "Gone Girl", category: "thriller", img: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800", trailer: "https://www.youtube.com/embed/Ym3LB0lOJ0o?autoplay=1", rating: "R", year: "2014", type: "movie" },
+    { id: "th3", title: "Shutter Island", category: "thriller", img: "https://images.unsplash.com/photo-1505635330303-d3f135ad0d9d?w=800", trailer: "https://www.youtube.com/embed/5iaYLCiq5RM?autoplay=1", rating: "R", year: "2010", type: "movie" },
+    { id: "th4", title: "Drishyam", category: "thriller", img: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=800", trailer: "https://www.youtube.com/embed/AuuX2j14NBg?autoplay=1", rating: "UA", year: "2015", type: "movie" },
+    { id: "th5", title: "The Silence of the Lambs", category: "thriller", img: "https://images.unsplash.com/photo-1542204172-3c35bba98807?w=800", trailer: "https://www.youtube.com/embed/W6Mm8Sbe__o?autoplay=1", rating: "R", year: "1991", type: "movie" },
+
+    // --- FAMILY ---
+    { id: "fm1", title: "The Lion King", category: "family", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800", trailer: "https://www.youtube.com/embed/7TavVZMewpY?autoplay=1", rating: "G", year: "1994", type: "movie" },
+    { id: "fm2", title: "Coco", category: "family", img: "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=800", trailer: "https://www.youtube.com/embed/Rvr68u6k5sI?autoplay=1", rating: "PG", year: "2017", type: "movie" },
+    { id: "fm3", title: "Frozen", category: "family", img: "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=800", trailer: "https://www.youtube.com/embed/TbQm5doF_40?autoplay=1", rating: "PG", year: "2013", type: "movie" },
+    { id: "fm4", title: "Toy Story", category: "family", img: "https://images.unsplash.com/photo-1596727147705-54a9d0c326e5?w=800", trailer: "https://www.youtube.com/embed/v-PjgYDrg70?autoplay=1", rating: "G", year: "1995", type: "movie" },
+    { id: "fm5", title: "Encanto", category: "family", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800", trailer: "https://www.youtube.com/embed/CaimKeDcado?autoplay=1", rating: "PG", year: "2021", type: "movie" },
+
+    // --- FANTASY ---
+    { id: "f1", title: "Harry Potter Series", category: "fantasy", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800", trailer: "https://www.youtube.com/embed/VyHV0BRtdxo?autoplay=1", rating: "PG-13", year: "2001", type: "movie" },
+    { id: "f2", title: "Lord of the Rings", category: "fantasy", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800", trailer: "https://www.youtube.com/embed/V75dMMIW2B4?autoplay=1", rating: "PG-13", year: "2001", type: "movie" },
+    { id: "f3", title: "Baahubali: The Beginning", category: "fantasy", img: "https://images.unsplash.com/photo-1542204172-3c35bba98807?w=800", trailer: "https://www.youtube.com/embed/VdajsTgMCRs?autoplay=1", rating: "UA", year: "2015", type: "movie" },
+    { id: "f4", title: "Baahubali: The Conclusion", category: "fantasy", img: "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=800", trailer: "https://www.youtube.com/embed/G62HrubdM5o?autoplay=1", rating: "UA", year: "2017", type: "movie" },
+
+    // --- LIVE ---
+    { id: "l1", title: "Action Movies Live", category: "live", img: "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=800", trailer: "https://www.youtube.com/embed/hEJnMQG9ev8?autoplay=1", rating: "LIVE", year: "2024", type: "tv" }
 ];
 
-let activeProfile = profiles[0];
+// --- CORE APP CONTROLLER ---
+const FreeveeApp = {
+    state: {
+        watchlist: JSON.parse(localStorage.getItem('freevee_watchlist')) || [],
+        searchQuery: ''
+    },
 
-// Navigation handler
-function initNavigation() {
-    const navLinks = document.querySelectorAll('.nav-links a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            navLinks.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
+    init() {
+        this.handleSplash();
+        this.bindEvents();
+        this.renderAll();
+    },
 
-            const category = link.textContent.toLowerCase();
-            filterContent(category);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    });
-}
+    handleSplash() {
+        const progress = document.getElementById('loader-progress');
+        const splash = document.getElementById('splash');
+        const app = document.getElementById('app-content');
 
-// Video Player Handler
-function openVideoPlayer(title, trailerUrl) {
-    const modal = document.getElementById('video-player-modal');
-    const video = document.getElementById('main-video');
-    const titleElement = document.getElementById('playing-title');
+        setTimeout(() => {
+            progress.style.width = '100%';
+        }, 100);
 
-    modal.classList.add('active');
-    titleElement.textContent = `Now Playing: ${title}`;
+        setTimeout(() => {
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.classList.add('hidden');
+                app.classList.remove('hidden');
+                app.style.animation = 'fadeIn 1s ease-out forwards';
+            }, 500);
+        }, 2200);
+    },
 
-    // Find trailer if URL wasn't provided (fallback)
-    const url = trailerUrl ||
-        movieData.find(m => m.title.toLowerCase() === title.toLowerCase())?.trailer ||
-        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
-
-    video.src = url;
-    video.play();
-}
-
-function closeVideoPlayer() {
-    const modal = document.getElementById('video-player-modal');
-    const video = document.getElementById('main-video');
-
-    modal.classList.remove('active');
-    video.pause();
-    video.src = "";
-}
-
-function initVideoPlayer() {
-    const closeBtn = document.getElementById('close-player');
-    const modal = document.getElementById('video-player-modal');
-
-    closeBtn.addEventListener('click', closeVideoPlayer);
-
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeVideoPlayer();
-        }
-    });
-
-    // Event delegation for movie cards
-    const container = document.querySelector('.row-container');
-    if (container) {
-        container.addEventListener('click', (e) => {
-            const card = e.target.closest('.card');
-            if (card) {
-                const title = card.dataset.title;
-                const trailer = card.dataset.trailer;
-                if (title) {
-                    openVideoPlayer(title, trailer);
-                }
-            }
-        });
-    }
-
-    // Keyboard support - Escape to close
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeVideoPlayer();
-        }
-    });
-}
-
-// Hero buttons handler
-function initHeroButtons() {
-    let heroButtonsContainer = document.querySelector('.hero-buttons');
-    if (!heroButtonsContainer) return;
-
-    // Remove old listener if any to prevent duplicates
-    const newContainer = heroButtonsContainer.cloneNode(true);
-    heroButtonsContainer.parentNode.replaceChild(newContainer, heroButtonsContainer);
-    heroButtonsContainer = newContainer; // Update reference to the new element
-
-    heroButtonsContainer.addEventListener('click', (e) => {
-        const btn = e.target.closest('.btn');
-        if (!btn) return;
-
-        const titleEl = document.querySelector('.hero-title');
-        const currentTitle = titleEl ? titleEl.textContent.trim() : "";
-        const btnText = (btn.innerText || btn.textContent || "").trim().toLowerCase();
-
-        console.log(`Hero button clicked: "${btnText}" for movie: "${currentTitle}"`);
-
-        if (btn.classList.contains('btn-primary')) {
-            // Watch/Play action
-            if (btnText.includes('watch') || btnText.includes('play') || btnText.includes('s1 e1')) {
-                const movie = movieData.find(m => m.title.toLowerCase() === currentTitle.toLowerCase()) ||
-                    movieData.find(m => currentTitle.toLowerCase().includes(m.title.toLowerCase()));
-
-                console.log(`Found movie:`, movie);
-                openVideoPlayer(currentTitle, movie?.trailer);
-            } else if (btnText.includes('manage')) {
-                alert('Watchlist management features are coming soon!');
-            }
-        }
-        else if (btn.classList.contains('btn-secondary')) {
-            // Add to List action
-            const movie = movieData.find(m => m.title.toLowerCase() === currentTitle.toLowerCase());
-            if (!movie) return;
-
-            const index = watchlist.findIndex(m => m.title.toLowerCase() === currentTitle.toLowerCase());
-            const isAdded = index === -1;
-
-            if (isAdded) {
-                watchlist.push(movie);
-                btn.classList.add('added');
+    bindEvents() {
+        // Sticky Header Logic
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
             } else {
-                watchlist.splice(index, 1);
-                btn.classList.remove('added');
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Close Player
+        document.getElementById('close-player').addEventListener('click', () => {
+            const modal = document.getElementById('player-modal');
+            const video = document.getElementById('video-element');
+            modal.classList.remove('active');
+            video.pause();
+        });
+
+        // Hero Interaction
+        const heroPlayBtn = document.getElementById('hero-play');
+        const heroAddListBtn = document.getElementById('hero-add-list');
+        const heroId = 't1'; // Avatar ID
+
+        if (heroPlayBtn) {
+            heroPlayBtn.addEventListener('click', () => {
+                const hero = movieData.find(m => m.id === heroId);
+                this.playVideo(hero);
+            });
+        }
+
+        if (heroAddListBtn) {
+            heroAddListBtn.addEventListener('click', () => {
+                this.toggleWatchlist(heroId);
+                // Update button state text
+                const inList = this.state.watchlist.includes(heroId);
+                heroAddListBtn.innerHTML = inList
+                    ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Added`
+                    : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"></path></svg> Add to List`;
+            });
+
+            // Initial state check
+            const inList = this.state.watchlist.includes(heroId);
+            if (inList) {
+                heroAddListBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Added`;
+            }
+        }
+
+        // Search Interaction
+        const searchTrigger = document.getElementById('search-trigger');
+        const closeSearch = document.getElementById('close-search');
+        const searchInput = document.getElementById('search-input');
+        const searchContainer = document.querySelector('.search-container');
+
+        if (searchTrigger && closeSearch && searchInput) {
+            searchTrigger.addEventListener('click', () => {
+                searchContainer.classList.add('active');
+                searchTrigger.classList.add('hidden');
+                closeSearch.classList.remove('hidden');
+                searchInput.focus();
+            });
+
+            closeSearch.addEventListener('click', () => {
+                searchContainer.classList.remove('active');
+                searchTrigger.classList.remove('hidden');
+                closeSearch.classList.add('hidden');
+                searchInput.value = '';
+                this.handleSearch('');
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                this.handleSearch(e.target.value);
+            });
+        }
+
+        // Watchlist Nav Button
+        const watchlistBtn = document.getElementById('nav-watchlist-btn');
+        if (watchlistBtn) {
+            watchlistBtn.addEventListener('click', () => {
+                const myListRow = document.getElementById('row-mylist');
+                if (myListRow) {
+                    myListRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    this.showToast('Your watchlist is empty', 'info');
+                }
+            });
+        }
+    },
+
+    handleSearch(query) {
+        this.state.searchQuery = query.toLowerCase();
+        this.renderAll();
+    },
+
+    toggleWatchlist(id) {
+        const index = this.state.watchlist.indexOf(id);
+        if (index === -1) {
+            this.state.watchlist.push(id);
+            this.showToast('Added to Watchlist');
+        } else {
+            this.state.watchlist.splice(index, 1);
+            this.showToast('Removed from Watchlist');
+        }
+        localStorage.setItem('freevee_watchlist', JSON.stringify(this.state.watchlist));
+        this.renderAll();
+    },
+
+    showToast(message) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--accent-primary)" stroke="none">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+            </svg>
+            <span>${message}</span>
+        `;
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.add('removing');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    },
+
+    renderAll() {
+        const container = document.getElementById('rows-container');
+
+        // Search Mode
+        if (this.state.searchQuery.length > 0) {
+            const results = movieData.filter(m =>
+                m.title.toLowerCase().includes(this.state.searchQuery) ||
+                m.category.includes(this.state.searchQuery)
+            );
+
+            if (results.length === 0) {
+                container.innerHTML = `<div class="container" style="padding-top: 2rem; text-align: center;"><h2>No results found</h2><p>Try searching for something else.</p></div>`;
+                return;
             }
 
-            btn.innerHTML = !isAdded
-                ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Add to List`
-                : `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Added`;
+            container.innerHTML = `
+                <div class="row">
+                    <h2>Search Results</h2>
+                    <div class="cards-container" style="display: flex; flex-wrap: wrap; overflow: visible;">
+                        ${results.map(movie => this.createMovieCardHTML(movie)).join('')}
+                    </div>
+                </div>
+            `;
+            return;
         }
-    });
-}
 
-// Profile card handler
-function initProfileCard() {
-    const trigger = document.getElementById('profile-trigger');
-    const card = document.getElementById('profile-card');
-    const profileImg = trigger.querySelector('img');
-    const activeAvatar = document.getElementById('active-avatar');
-    const activeName = document.getElementById('active-name');
+        // Standard Mode
+        let rowsHTML = '';
 
-    // Dynamically render the profiles grid in the dropdown
-    renderDropdownProfiles();
+        // My List Row
+        if (this.state.watchlist.length > 0) {
+            const mylistMovies = movieData.filter(m => this.state.watchlist.includes(m.id));
+            if (mylistMovies.length > 0) {
+                rowsHTML += `
+                    <div class="row" id="row-mylist">
+                        <h2>My List</h2>
+                        <div class="cards-container">
+                             ${mylistMovies.map(movie => this.createMovieCardHTML(movie)).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+        }
 
-    function renderDropdownProfiles() {
-        const grid = document.querySelector('.profiles-grid');
-        if (!grid) return;
+        // Categories
+        const categories = [
+            { title: "Trending Now", category: "trending" },
+            { title: "Action & Adventure", category: "action" },
+            { title: "Sci-Fi Dimensions", category: "scifi" },
+            { title: "Horror Nights", category: "horror" },
+            { title: "Romance", category: "romance" },
+            { title: "Laugh Out Loud", category: "comedy" },
+            { title: "Critically Acclaimed Dramas", category: "drama" },
+            { title: "Thriller & Crime", category: "thriller" },
+            { title: "Family & Kids", category: "family" },
+            { title: "Fantasy Worlds", category: "fantasy" },
+            { title: "Live Channels", category: "live" }
+        ];
 
-        grid.innerHTML = profiles.map(p => `
-            <div class="profile-item ${p.name === activeProfile.name ? 'active' : ''}" data-name="${p.name}" data-seed="${p.seed}">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${p.seed}" alt="${p.name}">
-                <span>${p.name}</span>
-            </div>
-        `).join('') + `
-            <div class="profile-item add-profile">
-                <div class="add-icon">+</div>
-                <span>Add New</span>
+        rowsHTML += categories.map(row => this.createRowHTML(row)).join('');
+        container.innerHTML = rowsHTML;
+    },
+
+    createRowHTML(row) {
+        const filteredMovies = movieData.filter(m => m.category === row.category);
+        if (filteredMovies.length === 0) return '';
+
+        return `
+            <div class="row">
+                <h2>${row.title}</h2>
+                <div class="cards-container">
+                    ${filteredMovies.map(movie => this.createMovieCardHTML(movie)).join('')}
+                </div>
             </div>
         `;
+    },
 
-        // Re-attach listeners to new elements
-        const profileItems = grid.querySelectorAll('.profile-item:not(.add-profile)');
-        profileItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const name = item.dataset.name;
-                const seed = item.dataset.seed;
-                activeProfile = profiles.find(p => p.name === name);
-                const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
+    createMovieCardHTML(movie) {
+        const inWatchlist = this.state.watchlist.includes(movie.id);
+        const iconPath = inWatchlist
+            ? "M5 13l4 4L19 7" // Checkmark
+            : "M12 5v14M5 12h14"; // Plus
 
-                // Update active profiles in UI
-                profileItems.forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-
-                // Update main navigations
-                profileImg.src = avatarUrl;
-                activeAvatar.src = avatarUrl;
-                activeName.textContent = name;
-                document.querySelector('.sidebar-user-name').textContent = name;
-
-                console.log(`Switched to profile: ${name}`);
-            });
-        });
-
-        const addBtn = grid.querySelector('.add-profile');
-        addBtn.addEventListener('click', () => {
-            const newName = prompt('Enter profile name:');
-            if (newName) {
-                profiles.push({ name: newName, seed: newName, color: '#fff' });
-                renderDropdownProfiles();
-            }
-        });
-    }
-
-    profileImg.addEventListener('click', (e) => {
-        e.stopPropagation();
-        card.classList.toggle('active');
-    });
-
-
-
-    document.addEventListener('click', (e) => {
-        if (!card.contains(e.target) && e.target !== profileImg) {
-            card.classList.remove('active');
-        }
-    });
-
-    // Sign out button
-    const signOut = card.querySelector('.sign-out');
-    signOut.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (confirm('Are you sure you want to sign out?')) {
-            document.getElementById('main-app').classList.add('hidden');
-            document.getElementById('landing-page').classList.remove('hidden');
-            card.classList.remove('active');
-            console.log('User signed out');
-        }
-    });
-
-    // Edit Profile Button (in profile card header)
-    const editActiveProfileBtn = document.querySelector('.edit-profile-btn');
-    if (editActiveProfileBtn) {
-        editActiveProfileBtn.addEventListener('click', () => {
-            const newName = prompt('Enter new profile name:', activeProfile.name);
-            if (newName && newName.trim()) {
-                const name = newName.trim();
-                activeProfile.name = name;
-
-                // Update UI
-                activeName.textContent = name;
-                document.querySelector('.sidebar-user-name').textContent = name;
-                document.getElementById('edit-username').value = name;
-
-                // Update in profile item list
-                const activeItem = document.querySelector('.profile-item.active span');
-                if (activeItem) activeItem.textContent = name;
-
-                console.log(`Profile name updated to: ${name}`);
-            }
-        });
-    }
-
-    // Account Settings Modal Logic
-    const accountTrigger = document.getElementById('account-settings-trigger');
-    const accountModal = document.getElementById('account-modal');
-    const closeAccountModal = document.getElementById('close-account-modal');
-    const saveUsernameBtn = document.getElementById('save-username');
-    const editUsernameInput = document.getElementById('edit-username');
-
-    accountTrigger.addEventListener('click', (e) => {
-        e.preventDefault();
-        accountModal.style.display = 'flex';
-        card.classList.remove('active'); // Close profile card
-    });
-
-    closeAccountModal.addEventListener('click', () => {
-        accountModal.style.display = 'none';
-        card.classList.add('active'); // Go back to the profile card
-    });
-
-    window.addEventListener('click', (e) => {
-        if (e.target === accountModal) {
-            accountModal.style.display = 'none';
-        }
-    });
-
-    saveUsernameBtn.addEventListener('click', () => {
-        const newName = editUsernameInput.value.trim();
-        if (newName) {
-            // Update UI globally
-            activeName.textContent = newName;
-            // Also update the active profile item name if it exists
-            const activeProfileItem = document.querySelector('.profile-item.active span');
-            if (activeProfileItem) activeProfileItem.textContent = newName;
-
-            // Update dashboard sidebar name
-            const sidebarName = document.querySelector('.sidebar-user-name');
-            if (sidebarName) sidebarName.textContent = newName;
-
-            // Update activeProfile object
-            activeProfile.name = newName;
-
-            // Visual feedback
-            saveUsernameBtn.textContent = 'Saved!';
-            saveUsernameBtn.style.background = '#00a8e1';
-
-            setTimeout(() => {
-                saveUsernameBtn.textContent = 'Save';
-                saveUsernameBtn.style.background = 'var(--primary-color)';
-                accountModal.style.display = 'none';
-            }, 1000);
-
-            console.log(`Username updated to: ${newName}`);
-        }
-    });
-
-    // Dashboard Switching Logic
-    const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            sidebarLinks.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-
-            // Find the requested section (mocking content change)
-            const sectionTitle = link.textContent.trim();
-            const mainContent = document.querySelector('.dashboard-main');
-
-            // If it's not Profile Info, show a "Coming Soon" or empty state
-            if (sectionTitle !== 'Profile Info') {
-                mainContent.innerHTML = `
-                    <section class="dashboard-section active">
-                        <div class="section-header">
-                            <h1>${sectionTitle}</h1>
-                        </div>
-                        <div class="empty-dashboard-state">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 64px; height: 64px; opacity: 0.2; margin-bottom: 20px;">
-                                <circle cx="12" cy="12" r="10"/>
-                                <line x1="12" y1="8" x2="12" y2="12"/>
-                                <line x1="12" y1="16" x2="12.01" y2="16"/>
-                            </svg>
-                            <p>This section is currently under construction. Check back soon for more updates!</p>
-                            <button class="btn btn-secondary back-to-profile">Back to Profile</button>
-                        </div>
-                    </section>
-                `;
-
-                document.querySelector('.back-to-profile').addEventListener('click', () => {
-                    sidebarLinks[0].click(); // Click Profile Info
-                });
-            } else {
-                // Restore original Profile Info content (simplification: reloading might be needed or storing it)
-                location.reload(); // Quick way to restore for this demo, or I could cache the HTML
-            }
-        });
-    });
-
-    // Manage Profiles Trigger
-    const manageProfilesTrigger = document.getElementById('manage-profiles-trigger');
-    if (manageProfilesTrigger) {
-        manageProfilesTrigger.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('main-app').classList.add('hidden');
-            document.getElementById('profile-selection').classList.remove('hidden');
-            renderProfileSelection();
-        });
-    }
-
-    const selectionManageBtn = document.querySelector('.manage-profiles-btn');
-    if (selectionManageBtn) {
-        selectionManageBtn.addEventListener('click', () => {
-            const screen = document.getElementById('profile-selection');
-            screen.classList.toggle('manage-mode');
-            selectionManageBtn.classList.toggle('active');
-            selectionManageBtn.textContent = screen.classList.contains('manage-mode') ? 'Done' : 'Manage Profiles';
-        });
-    }
-}
-
-// Search handler
-function initSearch() {
-    const searchInput = document.querySelector('.search-bar input');
-    searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
-        if (query.length > 2) {
-            const results = movieData.filter(m => m.title.toLowerCase().includes(query));
-            showSearchResults(results, query);
-        } else if (query.length === 0) {
-            filterContent('home');
-        }
-    });
-}
-
-function showSearchResults(results, query) {
-    const container = document.querySelector('.row-container');
-    container.innerHTML = `
-        <div class="row">
-            <h2 class="row-header">Search Results for "${query}"</h2>
-            <div class="cards-scroll">
-                ${results.length > 0
-            ? results.map(m => createMovieCardHTML(m)).join('')
-            : '<p style="color: var(--text-dim); padding: 40px;">No exact matches found. Try browsing our categories!</p>'}
+        return `
+            <div class="movie-card" 
+                 onclick="FreeveeApp.playVideoById('${movie.id}')"
+                 onmouseenter="FreeveeApp.handleCardHover(this, true, '${movie.id}')"
+                 onmouseleave="FreeveeApp.handleCardHover(this, false, '${movie.id}')">
+                <img src="${movie.img}" alt="${movie.title}" loading="lazy">
+                <div class="preview-container"></div>
+                <div class="card-overlay">
+                    <p class="card-title">${movie.title}</p>
+                    <div class="card-meta">
+                        <span>${movie.year}</span>
+                        <span>•</span>
+                        <span>${movie.rating}</span>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-circle" title="Play" onclick="event.stopPropagation(); FreeveeApp.playVideoById('${movie.id}')">
+                             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
+                        </button>
+                        <button class="action-circle" title="${inWatchlist ? 'Remove from List' : 'Add to List'}" 
+                                onclick="event.stopPropagation(); FreeveeApp.toggleWatchlist('${movie.id}')"
+                                style="${inWatchlist ? 'background: var(--accent-primary); color: var(--bg-dark);' : ''}">
+                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                 <path d="${iconPath}"></path>
+                             </svg>
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-    `;
-}
+        `;
+    },
 
-const movieData = [
-    {
-        title: "Dark Whisper",
-        img: "https://images.unsplash.com/photo-1440339738560-7ea831bc5244?auto=format&fit=crop&q=80&w=1000",
-        trailer: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-        rating: "TV-14",
-        year: "2025",
-        type: "movie"
-    },
-    {
-        title: "Up All Night",
-        img: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=1000",
-        trailer: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-        rating: "TV-PG",
-        year: "2024",
-        type: "tv"
-    },
-    {
-        title: "Velocity",
-        img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=1000",
-        trailer: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-        rating: "PG-13",
-        year: "2026",
-        type: "movie"
-    },
-    {
-        title: "Neon Horizon",
-        img: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&q=80&w=2070",
-        trailer: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-        rating: "TV-MA",
-        year: "2026",
-        type: "tv"
-    },
-    {
-        title: "Eternal Autumn",
-        img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&q=80&w=1000",
-        trailer: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-        rating: "PG-13",
-        year: "2025",
-        type: "movie"
-    },
-    {
-        title: "The Silent House",
-        img: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&q=80&w=1000",
-        trailer: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
-        rating: "R",
-        year: "2024",
-        type: "movie"
-    },
-    {
-        title: "Our Planet: Oceans",
-        img: "https://images.unsplash.com/photo-1551244072-5d12893278ab?auto=format&fit=crop&q=80&w=1000",
-        trailer: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-        rating: "TV-G",
-        year: "2025",
-        type: "tv"
-    },
-    {
-        title: "Sky Pirates",
-        img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=80&w=1000",
-        trailer: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackAds.mp4",
-        rating: "PG",
-        year: "2026",
-        type: "tv"
-    },
-    {
-        title: "Cyber Strike",
-        img: "https://images.unsplash.com/photo-1614728263952-84ea256f9679?auto=format&fit=crop&q=80&w=1000",
-        trailer: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
-        rating: "TV-MA",
-        year: "2026",
-        type: "movie"
-    },
-    {
-        title: "Alpine Escape",
-        img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1000",
-        trailer: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        rating: "PG",
-        year: "2024",
-        type: "movie"
-    },
-    {
-        title: "Lost in Time",
-        img: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=1000",
-        trailer: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-        rating: "TV-PG",
-        year: "2025",
-        type: "tv"
-    },
-    {
-        title: "Grand Prix Royale",
-        img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=1000",
-        trailer: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-        rating: "TV-14",
-        year: "2026",
-        type: "movie"
-    },
-    {
-        title: "LIVE: NEWS NOW",
-        img: "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?auto=format&fit=crop&q=80&w=2070",
-        trailer: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-        rating: "LIVE",
-        year: "2026",
-        type: "tv"
-    }
-];
+    handleCardHover(el, isEnter, movieId) {
+        const container = el.querySelector('.preview-container');
+        if (!container) return;
 
-const heroImage = "https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&q=80&w=2070";
+        if (isEnter) {
+            el.hoverTimeout = setTimeout(() => {
+                const movie = movieData.find(m => m.id === movieId);
+                if (movie && movie.trailer && movie.trailer.includes('youtube.com')) {
+                    // Optimized YouTube Embed for Preview
+                    // controls=0, disablekb=1, fs=0, modestbranding=1, iv_load_policy=3 (no annotations)
+                    // mute=1 is required for autoplay in most browsers
+                    const embedUrl = movie.trailer.split('?')[0] + '?autoplay=1&mute=1&controls=0&disablekb=1&fs=0&modestbranding=1&iv_load_policy=3&loop=1';
 
-const renderProfileSelection = () => {
-    const grid = document.getElementById('selection-grid');
-    if (!grid) return;
-
-    grid.innerHTML = profiles.map(p => `
-        <div class="selection-profile" data-name="${p.name}">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${p.seed}" alt="${p.name}" style="border-color: ${p.color}">
-            <span>${p.name}</span>
-        </div>
-    `).join('') + `
-        <div class="selection-profile add-profile-choice">
-            <div class="add-icon-large">+</div>
-            <span>Add Profile</span>
-        </div>
-    `;
-
-    document.querySelectorAll('.selection-profile').forEach(el => {
-        el.addEventListener('click', () => {
-            if (el.classList.contains('add-profile-choice')) {
-                const newName = prompt('Enter profile name:');
-                if (newName) {
-                    profiles.push({ name: newName, seed: newName, color: '#fff' });
-                    renderProfileSelection();
+                    container.innerHTML = `<iframe src="${embedUrl}" allow="autoplay" frameborder="0"></iframe>`;
+                    el.classList.add('playing');
                 }
-                return;
-            }
-
-            const isManageMode = document.getElementById('profile-selection').classList.contains('manage-mode');
-            const name = el.dataset.name;
-
-            if (isManageMode) {
-                const newName = prompt('Rename profile:', name);
-                if (newName && newName.trim()) {
-                    const p = profiles.find(p => p.name === name);
-                    if (p) {
-                        p.name = newName.trim();
-                        p.seed = newName.trim(); // Change avatar for fun
-                        renderProfileSelection();
-                    }
-                }
-                return;
-            }
-
-            activeProfile = profiles.find(p => p.name === name);
-            launchMainApp();
-        });
-    });
-};
-
-const launchMainApp = () => {
-    const mainApp = document.getElementById('main-app');
-    const profileSelection = document.getElementById('profile-selection');
-
-    profileSelection.classList.add('hidden');
-    mainApp.classList.remove('hidden');
-
-    // Update UI with selected profile
-    const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${activeProfile.seed}`;
-    document.querySelector('#profile-trigger img').src = avatarUrl;
-    document.getElementById('active-avatar').src = avatarUrl;
-    document.getElementById('active-name').textContent = activeProfile.name;
-    const sidebarName = document.querySelector('.sidebar-user-name');
-    if (sidebarName) sidebarName.textContent = activeProfile.name;
-
-    // Initialize App
-    const hero = document.getElementById('hero-section');
-    if (hero) hero.style.backgroundImage = `url('${heroImage}')`;
-
-    initNavigation();
-    initHeroButtons();
-    initProfileCard();
-    initSearch();
-    initVideoPlayer();
-    renderAllRows();
-
-    // Main App Back Button Listener
-    const mainBackBtn = document.getElementById('main-back-nav');
-    if (mainBackBtn && !mainBackBtn.hasListener) {
-        mainBackBtn.addEventListener('click', () => {
-            const activeLink = document.querySelector('.nav-links a.active');
-            const category = activeLink ? activeLink.textContent.toLowerCase() : 'home';
-
-            if (category === 'home') {
-                if (confirm('Go back to profile selection?')) {
-                    mainApp.classList.add('hidden');
-                    document.getElementById('profile-selection').classList.remove('hidden');
-                    renderProfileSelection();
-                }
-            } else {
-                const homeLink = Array.from(document.querySelectorAll('.nav-links a')).find(l => l.textContent.toLowerCase() === 'home');
-                if (homeLink) homeLink.click();
-            }
-        });
-        mainBackBtn.hasListener = true;
-    }
-
-    // Sticky nav logic
-    if (!window.hasStickyNavListener) {
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('.navbar');
-            if (nav) {
-                if (window.scrollY > 50) {
-                    nav.classList.add('scrolled');
-                } else {
-                    nav.classList.remove('scrolled');
-                }
-            }
-        });
-        window.hasStickyNavListener = true;
-    }
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Entry sequence logic
-    const splash = document.getElementById('splash-screen');
-    const landing = document.getElementById('landing-page');
-    const login = document.getElementById('login-page');
-    const mainApp = document.getElementById('main-app');
-
-    const getStartedBtn = document.getElementById('get-started-btn');
-    const loginTriggerBtn = document.getElementById('login-trigger-btn');
-    const loginForm = document.getElementById('login-form');
-
-    // Auth navigation elements
-    const registerPage = document.getElementById('register-page');
-    const createAccountTrigger = document.getElementById('create-account-trigger');
-    const backToLoginLink = document.getElementById('back-to-login');
-    const registerForm = document.getElementById('register-form');
-
-    // Back navigation buttons
-    const loginToLandingBtn = document.getElementById('login-to-landing');
-    const registerToLoginBtn = document.getElementById('register-to-login');
-    const mainBackBtn = document.getElementById('main-back-nav');
-
-    // 1. Splash Sequence
-    setTimeout(() => {
-        splash.style.opacity = '0';
-        splash.style.transition = 'opacity 1s ease';
-        setTimeout(() => {
-            splash.classList.add('hidden');
-            landing.classList.remove('hidden');
-            landing.style.animation = 'fadeIn 1s ease';
-        }, 1000);
-    }, 2500);
-
-    // 2. Landing -> Login
-    const goToLogin = () => {
-        landing.classList.add('hidden');
-        login.classList.remove('hidden');
-        login.style.animation = 'fadeIn 0.5s ease';
-    };
-
-    getStartedBtn.addEventListener('click', goToLogin);
-    loginTriggerBtn.addEventListener('click', goToLogin);
-
-    // 3. Login <-> Register Toggle
-    createAccountTrigger.addEventListener('click', () => {
-        login.classList.add('hidden');
-        registerPage.classList.remove('hidden');
-        registerPage.style.animation = 'fadeIn 0.5s ease';
-    });
-
-    const goBackToLogin = () => {
-        registerPage.classList.add('hidden');
-        login.classList.remove('hidden');
-        login.style.animation = 'fadeIn 0.5s ease';
-    };
-
-    backToLoginLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        goBackToLogin();
-    });
-
-    registerToLoginBtn.addEventListener('click', goBackToLogin);
-
-    loginToLandingBtn.addEventListener('click', () => {
-        login.classList.add('hidden');
-        landing.classList.remove('hidden');
-        landing.style.animation = 'fadeIn 0.5s ease';
-    });
-
-    // 4. Auth -> Profile Selection
-    const enterApp = () => {
-        login.classList.add('hidden');
-        registerPage.classList.add('hidden');
-
-        document.getElementById('profile-selection').classList.remove('hidden');
-        renderProfileSelection();
-    };
-
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        enterApp();
-    });
-
-    registerForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        enterApp();
-    });
-});
-
-function filterContent(category) {
-    const rowsContainer = document.querySelector('.row-container');
-    const heroTitle = document.querySelector('.hero-title');
-    const heroDesc = document.querySelector('.hero-description');
-    const heroSection = document.getElementById('hero-section');
-    const heroBadge = document.querySelector('.badge');
-    const heroBtn = document.querySelector('.hero-buttons .btn-primary');
-    const mainBackBtn = document.getElementById('main-back-nav');
-
-    rowsContainer.style.opacity = '0';
-
-    if (mainBackBtn) {
-        if (category === 'home') {
-            mainBackBtn.classList.add('hidden');
+            }, 800); // 800ms delay to prevent accidental triggers/flashing
         } else {
-            mainBackBtn.classList.remove('hidden');
+            clearTimeout(el.hoverTimeout);
+            container.innerHTML = ''; // Destroy iframe immediately to stop audio/video
+            el.classList.remove('playing');
         }
+    },
+
+    playVideoById(id) {
+        const movie = movieData.find(m => m.id === id);
+        if (movie) this.playVideo(movie);
+    },
+
+    playVideo(movie) {
+        const modal = document.getElementById('player-modal');
+        const wrapper = modal.querySelector('.video-wrapper') || modal.querySelector('.video-container'); // Fallback if wrapper changes
+
+        // Reset container content
+        if (!wrapper) return;
+        wrapper.innerHTML = '';
+
+        if (movie.trailer && (movie.trailer.includes('youtube.com') || movie.trailer.includes('youtu.be'))) {
+            // Create Iframe for YouTube
+            const iframe = document.createElement('iframe');
+            iframe.src = movie.trailer;
+            iframe.title = "YouTube video player";
+            iframe.frameBorder = "0";
+            iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+            iframe.allowFullscreen = true;
+            wrapper.appendChild(iframe);
+        } else {
+            // Create Video Element for Files
+            const video = document.createElement('video');
+            video.id = 'video-element';
+            video.controls = true;
+            video.autoplay = true;
+            video.muted = false; // Unmute by default for modal
+
+            const source = document.createElement('source');
+            source.src = movie.trailer;
+            source.type = 'video/mp4';
+
+            video.appendChild(source);
+            wrapper.appendChild(video);
+
+            video.play().catch(e => console.log("Auto-play blocked", e));
+        }
+
+        modal.classList.add('active');
     }
+};
 
-    setTimeout(() => {
-        if (category === 'home') {
-            heroSection.style.backgroundImage = `url('${heroImage}')`;
-            heroTitle.textContent = "NEON HORIZON";
-            heroDesc.textContent = "In a future where light is currency, one smuggler must navigate the shadows of a decaying megacity to save the last sunrise.";
-            heroBadge.textContent = "FREEVEE ORIGINAL";
-            heroBadge.style.background = "var(--accent-purple)";
-            heroBadge.style.color = "white";
-            heroBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Watch Now`;
-
-            const secondaryBtn = document.querySelector('.hero-buttons .btn-secondary');
-            if (secondaryBtn) secondaryBtn.classList.remove('hidden');
-
-            renderAllRows();
-        }
-        else if (category === 'movies') {
-            const featured = movieData.find(m => m.title === "Dark Whisper");
-            heroSection.style.backgroundImage = `url('${featured.img}')`;
-            heroTitle.textContent = "DARK WHISPER";
-            heroDesc.textContent = "An investigative journalist uncovers a chilling pattern of disappearances in a small town. The truth is deeper than she imagined.";
-            heroBadge.textContent = "FEATURED MOVIE";
-            heroBadge.style.background = "#e50914";
-            heroBadge.style.color = "white";
-            heroBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Watch Movie`;
-
-            rowsContainer.innerHTML = `
-                <div class="row">
-                    <h2 class="row-header">Action Movies for You</h2>
-                    <div class="cards-scroll">${renderMovieSet('movie')}</div>
-                </div>
-                <div class="row">
-                    <h2 class="row-header">Critically Acclaimed Thrillers</h2>
-                    <div class="cards-scroll">${renderMovieSet('movie')}</div>
-                </div>
-                <div class="row">
-                    <h2 class="row-header">Award Winning Cinema</h2>
-                    <div class="cards-scroll">${renderMovieSet('movie')}</div>
-                </div>
-            `;
-        }
-        else if (category === 'tv shows') {
-            const featured = movieData.find(m => m.title === "Sky Pirates");
-            heroSection.style.backgroundImage = `url('${featured.img}')`;
-            heroTitle.textContent = "SKY PIRATES";
-            heroDesc.textContent = "A group of daring outlaws take to the skies in high-tech airships to reclaim the world's stolen heritage. The sky is no longer the limit.";
-            heroBadge.textContent = "FREEVEE ORIGINAL";
-            heroBadge.style.background = "var(--accent-purple)";
-            heroBadge.style.color = "white";
-            heroBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Play S1 E1`;
-
-            rowsContainer.innerHTML = `
-                <div class="row">
-                    <h2 class="row-header">Trending TV Series</h2>
-                    <div class="cards-scroll">${renderMovieSet('tv')}</div>
-                </div>
-                <div class="row">
-                    <h2 class="row-header">Freevee Original Series</h2>
-                    <div class="cards-scroll">${renderMovieSet('tv')}</div>
-                </div>
-                <div class="row">
-                    <h2 class="row-header">Binge these shows</h2>
-                    <div class="cards-scroll">${renderMovieSet('tv')}</div>
-                </div>
-            `;
-        }
-        else if (category === 'live tv') {
-            heroSection.style.backgroundImage = `url('https://images.unsplash.com/photo-1594909122845-11baa439b7bf?auto=format&fit=crop&q=80&w=2070')`;
-            heroTitle.textContent = "LIVE: NEWS NOW";
-            heroDesc.textContent = "Stay updated with global breaking news, 24/7 weather reports, and live sports updates across our 200+ free channels.";
-            heroBadge.textContent = "🔴 LIVE";
-            heroBadge.style.background = "#ff0000";
-            heroBadge.style.color = "white";
-            heroBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Watch Live`;
-
-            rowsContainer.innerHTML = `
-                <div class="row">
-                    <h2 class="row-header">Top News Channels</h2>
-                    <div class="cards-scroll">${renderMovieSet('tv')}</div>
-                </div>
-                <div class="row">
-                    <h2 class="row-header">Freevee Sports Live</h2>
-                    <div class="cards-scroll">${renderMovieSet('movie')}</div>
-                </div>
-            `;
-        }
-        else if (category === 'my list') {
-            heroTitle.textContent = "YOUR WATCHLIST";
-            heroDesc.textContent = "Pick up right where you left off. All your saved movies and TV shows are available here across all your devices.";
-            heroBadge.textContent = "PERSONALIZED";
-            heroBadge.style.background = "var(--accent-purple)";
-            heroBadge.style.color = "white";
-            heroBtn.innerHTML = `Manage List`;
-
-            const secondaryBtn = document.querySelector('.hero-buttons .btn-secondary');
-            if (secondaryBtn) secondaryBtn.classList.add('hidden');
-
-            if (watchlist.length > 0) {
-                rowsContainer.innerHTML = `
-                    <div class="row">
-                        <h2 class="row-header">Movies & TV Shows</h2>
-                        <div class="cards-scroll">
-                            ${watchlist.map(m => createMovieCardHTML(m)).join('')}
-                        </div>
-                    </div>
-                `;
-            } else {
-                rowsContainer.innerHTML = `
-                    <div class="row">
-                        <div class="empty-list">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                            <h3>Your list is empty</h3>
-                            <p>Add titles that you want to watch later so you can easily find them here.</p>
-                            <button class="btn btn-primary" onclick="document.querySelector('.nav-links a').click()">Browse Home</button>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        rowsContainer.style.opacity = '1';
-        rowsContainer.style.transition = 'opacity 0.4s';
-
-        // Re-initialize hero buttons to ensure listeners are active on new content
-        initHeroButtons();
-    }, 300);
-}
-
-function renderMovieSet(type) {
-    const movies = movieData.filter(m => m.type === type);
-    let html = '';
-    for (let i = 0; i < 18; i++) {
-        html += createMovieCardHTML(movies[i % movies.length]);
-    }
-    return html;
-}
-
-function renderAllRows() {
-    const container = document.querySelector('.row-container');
-    container.innerHTML = `
-        <div class="row">
-            <h2 class="row-header">Trending Now</h2>
-            <div class="cards-scroll" id="trending-row"></div>
-        </div>
-        <div class="row">
-            <h2 class="row-header">Freevee Originals</h2>
-            <div class="cards-scroll" id="originals-row"></div>
-        </div>
-        <div class="row">
-            <h2 class="row-header">Popular Movies</h2>
-            <div class="cards-scroll" id="movies-row"></div>
-        </div>
-        <div class="row">
-            <h2 class="row-header">Live Channels</h2>
-            <div class="cards-scroll" id="live-row"></div>
-        </div>
-        <div class="row">
-            <h2 class="row-header">Global Favorites</h2>
-            <div class="cards-scroll" id="global-row"></div>
-        </div>
-    `;
-
-    const rowIds = ['trending-row', 'originals-row', 'movies-row', 'live-row', 'global-row'];
-    rowIds.forEach(rowId => {
-        const rowElement = document.getElementById(rowId);
-        if (rowElement) {
-            for (let i = 0; i < 18; i++) {
-                const movie = movieData[i % movieData.length];
-                const card = createMovieCard(movie);
-                rowElement.appendChild(card);
-            }
-        }
-    });
-}
-
-function createMovieCard(movie) {
-    const card = document.createElement('div');
-    card.innerHTML = createMovieCardHTML(movie);
-    return card.firstElementChild; // Return the actual card element
-}
-
-function createMovieCardHTML(movie) {
-    return `
-        <div class="card" data-title="${movie.title}" data-trailer="${movie.trailer}">
-            <img src="${movie.img}" alt="${movie.title}" loading="lazy">
-            <div class="card-overlay">
-                <h3 class="card-title">${movie.title}</h3>
-                <div class="card-footer">
-                    <span>${movie.year}</span>
-                    <span>${movie.rating}</span>
-                </div>
-            </div>
-        </div>
-    `;
-}
+// Start the App
+document.addEventListener('DOMContentLoaded', () => FreeveeApp.init());
