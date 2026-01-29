@@ -4,427 +4,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freevee Clone Demo | Portfolio Project</title>
-    <meta name="description"
-        content="This is a portfolio project demonstrating a UI clone of Freevee. For educational purposes only.">
+    <title>Amazon Freevee | Premium Streaming</title>
+    <meta name="description" content="Watch thousands of movies and TV shows for free. Premium titles, always free.">
+
+    <!-- Design System & Fonts -->
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Outfit:wght@400;600;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
         rel="stylesheet">
 </head>
 
-<body class="bg-dark">
-    <!-- Disclaimer Banner -->
-    <div id="demo-banner"
-        style="background: #ff4d4d; color: white; text-align: center; padding: 10px; font-weight: bold; position: sticky; top: 0; z-index: 99999; font-size: 14px;">
-        ⚠️ PORTFOLIO PROJECT: This is an educational clone. Not affiliated with Amazon Freevee. <button
-            onclick="this.parentElement.style.display='none'"
-            style="background: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; margin-left: 10px; font-weight: bold;">Dismiss</button>
-    </div>
-    <!-- Intro Splash Screen -->
-    <div id="splash-screen" class="splash-screen">
-        <div class="animated-logo">
-            <span class="free">free</span><span class="vee">vee</span>
-        </div>
-    </div>
+<body>
 
-    <!-- Landing Page -->
-    <div id="landing-page" class="landing-page hidden">
-        <div class="landing-content">
-            <div class="landing-logo">
-                <span class="free">free</span><span class="vee">vee</span>
-                <span class="sub-brand">by amazon</span>
-            </div>
-            <h1>Premium movies & TV, <br><span class="highlight">always free.</span></h1>
-            <p>Stream thousands of hit movies, Freevee Originals, and live 24/7 entertainment channels with no paid
-                subscriptions. Ever.</p>
-            <div class="landing-actions">
-                <button id="get-started-btn" class="btn btn-primary btn-lg">Browse Demo</button>
-                <button id="login-trigger-btn" class="btn btn-secondary btn-lg">Demo Sign In</button>
-            </div>
-        </div>
-        <div class="landing-footer">
-            <span>Hundreds of devices supported</span>
-            <div class="device-icons">
-                <!-- Device SVGs would go here -->
+    <!-- Premium Splash Loader -->
+    <div id="splash" class="re-splash">
+        <div class="loader-logo">
+            <div class="logo">free<span>vee</span></div>
+            <div class="loader-bar">
+                <div id="loader-progress" class="loader-progress"></div>
             </div>
         </div>
     </div>
 
-    <!-- Login Page -->
-    <div id="login-page" class="login-page hidden">
-        <div class="login-container">
-            <div class="login-box">
-                <button class="back-nav" id="login-to-landing">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <polyline points="15 18 9 12 15 6" />
-                    </svg>
-                </button>
-                <h2>Demo Sign In</h2>
-                <form id="login-form">
-                    <div class="input-group">
-                        <label>Email or mobile phone number</label>
-                        <input type="email" placeholder="name@example.com" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Password</label>
-                        <input type="password" placeholder="••••••••" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full">Continue</button>
-                    <p class="terms">By continuing, you agree to Amazon's <a href="#">Conditions of Use</a> and <a
-                            href="#">Privacy Notice</a>.</p>
-                </form>
-                <div class="login-footer">
-                    <p>New to Amazon?</p>
-                    <button id="create-account-trigger" class="btn btn-secondary btn-full">Create your Amazon
-                        account</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Main Navigation -->
+    <header class="navbar" id="navbar">
+        <div class="container nav-content">
+            <a href="#" class="logo">free<span>vee</span></a>
 
-    <!-- Create Account Page -->
-    <div id="register-page" class="login-page hidden">
-        <div class="login-container">
-            <div class="login-box">
-                <button class="back-nav" id="register-to-login">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <polyline points="15 18 9 12 15 6" />
-                    </svg>
-                </button>
-                <h2>Demo Create Account</h2>
-                <form id="register-form">
-                    <div class="input-group">
-                        <label>Your name</label>
-                        <input type="text" placeholder="First and last name" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Mobile number or email</label>
-                        <input type="text" placeholder="name@example.com" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Password</label>
-                        <input type="password" placeholder="At least 6 characters" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Re-enter password</label>
-                        <input type="password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full">Verify email</button>
-                    <p class="terms">By creating an account, you agree to Amazon's <a href="#">Conditions of Use</a> and
-                        <a href="#">Privacy Notice</a>.
-                    </p>
-                </form>
-                <div class="login-footer">
-                    <p>Already have an account? <a href="#" id="back-to-login" class="link-primary">Sign in</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
+            <nav class="nav-links">
+                <a href="#" class="active">Home</a>
+                <a href="#">Movies</a>
+                <a href="#">TV Shows</a>
+                <a href="#">Originals</a>
+                <a href="#">Live TV</a>
+            </nav>
 
-    <!-- Profile Selection Screen -->
-    <div id="profile-selection" class="profile-selection-screen hidden">
-        <div class="selection-container">
-            <h1>Who's watching?</h1>
-            <div class="profile-choices" id="selection-grid">
-                <!-- Profiles will be injected here -->
-            </div>
-            <button class="btn-outline manage-profiles-btn">Manage Profiles</button>
-        </div>
-    </div>
-
-    <!-- Main Content (Hidden Initially) -->
-    <div id="main-app" class="main-app hidden">
-        <header class="navbar">
-            <div class="nav-container">
-                <button id="main-back-nav" class="back-nav main-back hidden">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <polyline points="15 18 9 12 15 6" />
-                    </svg>
-                </button>
-                <div class="logo">
-                    <span class="free">free</span><span class="vee">vee</span>
-                    <span class="sub-brand">by amazon</span>
-                </div>
-                <nav class="nav-links">
-                    <a href="#" class="active">Home</a>
-                    <a href="#">Movies</a>
-                    <a href="#">TV Shows</a>
-                    <a href="#">Live TV</a>
-                    <a href="#">My List</a>
-                </nav>
-                <div class="nav-actions">
-                    <div class="search-bar">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <div class="nav-actions">
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Search movies, TV shows..." class="search-input">
+                    <button class="search-btn" id="search-trigger">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                         </svg>
-                        <input type="text" placeholder="Search movies, TV shows...">
-                    </div>
-                    <div class="profile" id="profile-trigger">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Naveen" alt="Profile">
-                        <div class="profile-card" id="profile-card">
-                            <div class="profile-header">
-                                <div class="profile-main-info">
-                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Naveen"
-                                        alt="Profile Large" id="active-avatar">
-                                    <div class="profile-info">
-                                        <p class="profile-name" id="active-name">Naveen</p>
-                                        <p class="profile-type">Subscriber</p>
-                                    </div>
-                                </div>
-                                <button class="edit-profile-btn" title="Edit Profile">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                    </svg>
-                                </button>
-                            </div>
-
-                            <div class="profiles-section">
-                                <p class="section-title">Who's Watching?</p>
-                                <div class="profiles-grid">
-                                    <div class="profile-item active" data-name="Naveen" data-seed="Naveen">
-                                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Naveen" alt="Naveen">
-                                        <span>Naveen</span>
-                                    </div>
-                                    <div class="profile-item" data-name="Kids" data-seed="Felix">
-                                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Kids">
-                                        <span>Kids</span>
-                                    </div>
-                                    <div class="profile-item add-profile">
-                                        <div class="add-icon">+</div>
-                                        <span>Add New</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="preference-section">
-                                <div class="pref-item">
-                                    <span>Autoplay Trailers</span>
-                                    <label class="switch">
-                                        <input type="checkbox" checked>
-                                        <span class="slider"></span>
-                                    </label>
-                                </div>
-                                <div class="pref-item">
-                                    <span>Data Saver</span>
-                                    <label class="switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <ul class="profile-menu">
-                                <li><a href="#" id="manage-profiles-trigger"><svg viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" class="menu-icon">
-                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                            <circle cx="12" cy="7" r="4" />
-                                        </svg> Manage Profiles</a></li>
-                                <li><a href="#" id="account-settings-trigger"><svg viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" class="menu-icon">
-                                            <circle cx="12" cy="12" r="3" />
-                                            <path
-                                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-                                        </svg> Account Settings</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#" class="sign-out"><svg viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" class="menu-icon">
-                                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                                            <polyline points="16 17 21 12 16 7" />
-                                            <line x1="21" y1="12" x2="9" y2="12" />
-                                        </svg> Sign Out</a></li>
-                            </ul>
-                        </div>
-                    </div>
+                    </button>
+                    <button class="close-search hidden" id="close-search">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <button class="watchlist-btn" id="nav-watchlist-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </button>
+                <div class="profile-circle" id="profile-trigger">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Naveen" alt="User">
                 </div>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <main>
-            <section class="hero" id="hero-section">
-                <div class="hero-overlay"></div>
-                <div class="hero-content">
-                    <div class="badge">FREEVEE ORIGINAL</div>
-                    <h1 class="hero-title">NEON HORIZON</h1>
-                    <p class="hero-description">In a future where light is currency, one smuggler must navigate the
-                        shadows
-                        of a decaying megacity to save the last sunrise.</p>
-                    <div class="hero-meta">
-                        <span class="rating">TV-MA</span>
-                        <span class="genre">Sci-Fi • Thriller • Action</span>
-                        <span class="year">2026</span>
-                    </div>
-                    <div class="hero-buttons">
-                        <button class="btn btn-primary">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M8 5v14l11-7z" />
+    <!-- Main Application Flow -->
+    <main id="app-content" class="hidden">
+
+        <!-- Hero Spotlight -->
+        <section class="hero" id="hero">
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?auto=format&fit=crop&q=80&w=2070"
+                    alt="Spotlight Content" id="hero-img">
+            </div>
+
+            <div class="container">
+                <div class="hero-content animate-fade">
+                    <span class="hero-badge">Featured on Freevee</span>
+                    <h1 id="hero-title">Avatar: The Way of Water</h1>
+                    <p class="hero-description" id="hero-desc">Jake Sully lives with his newfound family formed on the
+                        extrasolar moon Pandora. Once a familiar threat returns to finish what was previously started,
+                        Jake must work with Neytiri and the army of the Na'vi race to protect their home.</p>
+
+                    <div class="hero-btns">
+                        <button class="btn btn-primary" id="hero-play">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M8 5v14l11-7z"></path>
                             </svg>
                             Watch Now
                         </button>
-                        <button class="btn btn-secondary">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 5v14M5 12h14" />
+                        <button class="btn btn-secondary" id="hero-add-list">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <path d="M12 5v14M5 12h14"></path>
                             </svg>
                             Add to List
                         </button>
                     </div>
                 </div>
-            </section>
-
-            <section class="row-container">
-                <div class="row">
-                    <h2 class="row-header">Trending Now</h2>
-                    <div class="cards-scroll" id="trending-row">
-                        <!-- Cards will be injected by JS -->
-                    </div>
-                </div>
-
-                <div class="row">
-                    <h2 class="row-header">Freevee Originals</h2>
-                    <div class="cards-scroll" id="originals-row">
-                        <!-- Cards will be injected by JS -->
-                    </div>
-                </div>
-
-                <div class="row">
-                    <h2 class="row-header">Popular Movies</h2>
-                    <div class="cards-scroll" id="movies-row">
-                        <!-- Cards will be injected by JS -->
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer class="footer">
-            <div class="footer-links">
-                <a href="#">Help</a>
-                <a href="#">Terms of Use</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Cookie Notice</a>
-                <a href="#">Interest-Based Ads</a>
             </div>
-            <p class="copyright">&copy; 2026 Amazon Freevee. All rights reserved.</p>
-        </footer>
+        </section>
 
-    </div><!-- End main-app -->
+        <!-- Dynamic Content Rows -->
+        <section class="content-section">
+            <div class="container" id="rows-container">
+                <!-- Rows will be injected via JS -->
+            </div>
+        </section>
 
-    <div id="video-player-modal" class="video-modal">
-        <div class="video-container">
-            <h2 id="playing-title" class="playing-title"></h2>
-            <button id="close-player" class="close-btn">&times;</button>
-            <video id="main-video" controls>
+    </main>
+
+    <div id="player-modal" class="modal">
+        <button class="close-modal" id="close-player">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <div class="video-wrapper">
+            <video id="video-element" controls preload="auto">
                 <source src="" type="video/mp4">
-                Your browser does not support the video tag.
             </video>
         </div>
     </div>
 
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Core Logic -->
     <script src="main.js"></script>
-    <!-- Account Settings Modal -->
-    <div id="account-modal" class="video-modal">
-        <div class="modal-content account-dashboard">
-            <button id="close-account-modal" class="back-nav dashboard-back">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <polyline points="15 18 9 12 15 6" />
-                </svg>
-            </button>
-            <div class="dashboard-container">
-                <!-- Sidebar -->
-                <aside class="dashboard-sidebar">
-                    <div class="sidebar-header">
-                        <div class="user-badge">
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Naveen" alt="User">
-                            <span class="status-dot"></span>
-                        </div>
-                        <p class="sidebar-user-name">Personal Account</p>
-                    </div>
-                    <nav class="sidebar-nav">
-                        <a href="#" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                <circle cx="12" cy="7" r="4" />
-                            </svg> Profile Info</a>
-                        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="5" width="20" height="14" rx="2" />
-                                <line x1="2" y1="10" x2="22" y2="10" />
-                            </svg> Payments & Billing</a>
-                        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
-                                <line x1="12" y1="18" x2="12.01" y2="18" />
-                            </svg> Registered Devices</a>
-                        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                            </svg> Privacy Control</a>
-                    </nav>
-                </aside>
-
-                <!-- Main Content -->
-                <main class="dashboard-main">
-                    <section class="dashboard-section active">
-                        <div class="section-header">
-                            <h1>Account Overview</h1>
-                            <span class="badge badge-premium">Verified Member</span>
-                        </div>
-
-                        <div class="settings-grid">
-                            <div class="setting-card">
-                                <div class="card-header">
-                                    <label>Display Identity</label>
-                                    <span class="hint">How your name appears to others</span>
-                                </div>
-                                <div class="editable-input-container">
-                                    <input type="text" id="edit-username" value="Naveen" placeholder="Enter your name">
-                                    <button class="btn btn-primary" id="save-username">Update Name</button>
-                                </div>
-                            </div>
-
-                            <div class="setting-card">
-                                <div class="card-header">
-                                    <label>Registered Email</label>
-                                    <span class="verified-tag"><svg viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="3">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg> Verified</span>
-                                </div>
-                                <div class="static-field">
-                                    <p>naveen.darsipati@amazon.com</p>
-                                    <button class="btn-text">Change</button>
-                                </div>
-                            </div>
-
-                            <div class="setting-card col-span-2">
-                                <div class="card-header">
-                                    <label>Freevee Subscription</label>
-                                </div>
-                                <div class="subscription-status">
-                                    <div class="status-info">
-                                        <h3>Free Ad-Supported</h3>
-                                        <p>Access to 50,000+ titles with occasional ad breaks</p>
-                                    </div>
-                                    <button class="btn btn-secondary">Upgrade to Ad-Free</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="danger-zone">
-                            <h3>Security & Privacy</h3>
-                            <div class="danger-card">
-                                <div>
-                                    <p>Sign out of all other web sessions</p>
-                                    <span class="hint">Useful if you logged in on a public computer</span>
-                                </div>
-                                <button class="btn-outline">Reset Sessions</button>
-                            </div>
-                        </div>
-                    </section>
-                </main>
-            </div>
-        </div>
-    </div>
 </body>
 
 </html>
